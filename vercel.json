@@ -1,7 +1,7 @@
 {
   "env": {
     "FRAMEWORK_PROVIDER": "rest",
-    "NEXT_PUBLIC_REST_API_ENDPOINT": "https://heartszibah.com/api",
+    "NEXT_PUBLIC_REST_API_ENDPOINT": "https://staging.heartszibah.com/api",
     "NEXT_PUBLIC_GRAPHQL_API_ENDPOINT": "",
     "NEXT_PUBLIC_SITE_URL": "",
     "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "",
@@ -18,7 +18,7 @@
   "build": {
     "env": {
       "FRAMEWORK_PROVIDER": "rest",
-      "NEXT_PUBLIC_REST_API_ENDPOINT": "https://heartszibah.com/api",
+      "NEXT_PUBLIC_REST_API_ENDPOINT": "https://staging.heartszibah.com/api",
       "NEXT_PUBLIC_GRAPHQL_API_ENDPOINT": "",
       "NEXT_PUBLIC_SITE_URL": "",
       "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "",
