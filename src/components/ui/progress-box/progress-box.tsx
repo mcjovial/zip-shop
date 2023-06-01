@@ -9,6 +9,8 @@ type ProgressProps = {
 };
 
 const ProgressBox: React.FC<ProgressProps> = ({ status, data }) => {
+  data?.sort((a, b) => a.serial - b.serial);
+
   return (
     <Scrollbar
       className="h-full w-full"
