@@ -315,6 +315,7 @@ export interface Order {
 
 export interface VerifyCouponInputType {
   code: string;
+  amount?: number;
 }
 
 export interface VerifyCouponResponse {

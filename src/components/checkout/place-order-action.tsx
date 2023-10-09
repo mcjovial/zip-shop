@@ -14,6 +14,7 @@ import {
 } from '@/store/quick-cart/cart.utils';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { useUser } from '@/framework/user';
 
 export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   const { t } = useTranslation('common');
@@ -21,6 +22,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   const { createOrder, isLoading } = useCreateOrder();
   const { locale } : any = useRouter();
   const { items } = useCart();
+  const { me }: any = useUser();
 
   const { orderStatuses } = useOrderStatuses({
     limit: 1,
@@ -59,6 +61,11 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
     },
     Number(discount)
   );
+
+  const hiba_discount_name = `HIBA-${me.plan.name}`;
+  const hiba_discount_amount = subtotal * Number(me.plan.physicalDiscount) / 100 
+  const hiba_discounted_total = subtotal - (subtotal * Number(me.plan.physicalDiscount) / 100)
+
   const handlePlaceOrder = () => {
     if (!customer_contact) {
       setErrorMessage('Contact Number Is Required');
@@ -77,12 +84,12 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       products: available_items?.map((item) => formatOrderedProduct(item)),
       status: orderStatuses[0]?.id ?? '1',
       amount: subtotal,
-      coupon_id: Number(coupon?.id),
-      discount: discount ?? 0,
-      paid_total: total,
+      coupon_id: me.plan ? hiba_discount_name : coupon?.code,
+      discount: me.plan ? hiba_discount_amount : discount ?? 0,
+      paid_total: me.plan ? hiba_discounted_total : total,
       sales_tax: verified_response?.total_tax,
       delivery_fee: verified_response?.shipping_charge,
-      total,
+      total: me.plan ? hiba_discounted_total : total,
       delivery_time: delivery_time?.title,
       customer_contact,
       payment_gateway,

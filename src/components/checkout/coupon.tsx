@@ -7,15 +7,17 @@ import { couponAtom } from '@/store/checkout';
 import { useAtom } from 'jotai';
 import classNames from 'classnames';
 import { useVerifyCoupon } from '@/framework/settings';
+import { useUser } from '@/framework/user';
 
 type FormTypes = {
   code: string;
 };
 
-const Coupon = ({ theme }: { theme?: 'dark' }) => {
+const Coupon = ({ theme, amount }: { theme?: 'dark', amount: number}) => {
   const { t } = useTranslation('common');
   const [hasCoupon, setHasCoupon] = useState(false);
   const [coupon, applyCoupon] = useAtom(couponAtom);
+  const { me }: any = useUser();
 
   const {
     register,
@@ -55,7 +57,8 @@ const Coupon = ({ theme }: { theme?: 'dark' }) => {
     //   // }
     // );
     verifyCoupon({
-      code: code?.code
+      code: code?.code,
+      amount,
     });
   }
 

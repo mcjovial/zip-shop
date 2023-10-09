@@ -21,6 +21,7 @@ import { ItemInfoRow } from '@/components/checkout/item/item-info-row';
 import PaymentGrid from '@/components/checkout/payment/payment-grid';
 import { PlaceOrderAction } from '@/components/checkout/place-order-action';
 import Wallet from '@/components/checkout/wallet/wallet';
+import { useUser } from '@/framework/user';
 
 interface Props {
   className?: string;
@@ -33,9 +34,24 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
   const [discount] = useAtom(discountAtom);
   const [payableAmount] = useAtom(payableAmountAtom);
   const [use_wallet] = useAtom(walletAtom);
-  console.log('verified-response', verifiedResponse);
+  // console.log('verified-response', verifiedResponse);
   const available_items = items?.filter(
     (item) => !verifiedResponse?.unavailable_products?.includes(item.id)
+  );
+  const { me }: any = useUser();
+
+  const base_amount = calculateTotal(available_items);
+
+  const hiba_discount_name = `HIBA-${me.plan.name}`;
+  const { price: hiba_discount_amount } = usePrice(
+    verifiedResponse && {
+      amount: base_amount * Number(me.plan.physicalDiscount) / 100 ?? 0,
+    }
+  );
+  const { price: hiba_discounted_total } = usePrice(
+    verifiedResponse && {
+      amount: base_amount - (base_amount * Number(me.plan.physicalDiscount) / 100) ?? 0,
+    }
   );
 
   const { price: tax } = usePrice(
@@ -50,7 +66,6 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
     }
   );
 
-  const base_amount = calculateTotal(available_items);
   const { price: sub_total } = usePrice(
     verifiedResponse && {
       amount: base_amount,
@@ -103,7 +118,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
         <ItemInfoRow title={t('text-sub-total')} value={sub_total} />
         <ItemInfoRow title={t('text-tax')} value={tax} />
         <ItemInfoRow title={t('text-shipping')} value={shipping} />
-        {discount && coupon ? (
+        {!me.plan ? (discount && coupon ? (
           <div className="flex justify-between">
             <p className="text-sm text-body ltr:mr-4 rtl:ml-4">
               {t('text-discount')}
@@ -118,14 +133,24 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
           </div>
         ) : (
           <div className="mt-5 !mb-4 flex justify-between">
-            <Coupon />
+            <Coupon amount={base_amount}/>
+          </div>
+        )): (
+          <div className="flex justify-between">
+            <p className="text-sm text-body ltr:mr-4 rtl:ml-4">
+              {t('text-discount')}
+            </p>
+            <span className="flex items-center text-xs font-semibold text-red-500 ltr:mr-auto rtl:ml-auto">
+              ({hiba_discount_name})
+            </span>
+            <span className="text-sm text-body">{hiba_discount_amount}</span>
           </div>
         )}
         <div className="flex justify-between pt-3 border-t-4 border-double border-border-200">
           <p className="text-base font-semibold text-heading">
             {t('text-total')}
           </p>
-          <span className="text-base font-semibold text-heading">{total}</span>
+          {me.plan ? <span className="text-base font-semibold text-heading">{hiba_discounted_total}</span> : <span className="text-base font-semibold text-heading">{total}</span>}
         </div>
       </div>
       {verifiedResponse && (
