@@ -23,15 +23,15 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ className }) => {
 
         <div className="grid grid-cols-3">
           <div className="mb-2 flex flex-col items-center justify-center space-y-1 border-r border-dashed border-gray-200 py-2 px-2 text-[13px] font-semibold capitalize text-heading">
-            <span>{me?.wallet?.total_points ?? 0}</span>
+            <span>{me?.wallet?.total ?? 0}</span>
             <span>{t('text-total')}</span>
           </div>
           <div className="mb-2 flex flex-col items-center justify-center space-y-1 border-r border-dashed border-gray-200 py-2 px-2 text-[13px] font-semibold capitalize text-heading">
-            <span>{me?.wallet?.points_used ?? 0}</span>
+            <span>{me?.wallet?.used ?? 0}</span>
             <span>{t('text-used')}</span>
           </div>
           <div className="mb-2 flex flex-col items-center justify-center space-y-1 py-2 px-2 text-[13px] font-semibold capitalize text-heading">
-            <span>{me?.wallet?.available_points ?? 0}</span>
+            <span>{me?.wallet?.available ?? 0}</span>
             <span>{t('text-available')}</span>
           </div>
         </div>

@@ -58,7 +58,7 @@ const AuthorizedMenu: React.FC<{ minimal?: boolean }> = ({ minimal }) => {
           <Menu.Item>
             <li className="flex w-full items-center justify-between bg-accent-500 px-6 py-4 text-xs font-semibold capitalize text-light focus:outline-none ltr:text-left rtl:text-right">
               <span>{t('text-points')}</span>
-              <span>{me?.wallet?.available_points ?? 0}</span>
+              <span>{me?.wallet?.available ?? 0}</span>
             </li>
           </Menu.Item>
           {siteSettings.authorizedLinks.map(({ href, label }) => (

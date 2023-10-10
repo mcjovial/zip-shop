@@ -7,7 +7,7 @@ import ValidationError from '@/components/ui/validation-error';
 import Button from '@/components/ui/button';
 import { formatOrderedProduct } from '@/lib/format-ordered-product';
 import { useCart } from '@/store/quick-cart/cart.context';
-import { checkoutAtom, discountAtom, walletAtom } from '@/store/checkout';
+import { checkoutAtom, discountAtom, payableAmountAtom, walletAtom } from '@/store/checkout';
 import {
   calculatePaidTotal,
   calculateTotal,
@@ -23,6 +23,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   const { locale } : any = useRouter();
   const { items } = useCart();
   const { me }: any = useUser();
+  const [payableAmount] = useAtom(payableAmountAtom);
 
   const { orderStatuses } = useOrderStatuses({
     limit: 1,
@@ -79,6 +80,10 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
     //   setErrorMessage('Please Pay First');
     //   return;
     // }
+    const total_to_pay = me.plan ? hiba_discounted_total : total;
+    const total_with_wallet = payableAmount == 0 && !use_wallet_points ? total_to_pay : payableAmount;
+    // console.log('>>>><<<<<', total_with_wallet);
+    
     let input = {
       //@ts-ignore
       products: available_items?.map((item) => formatOrderedProduct(item)),
@@ -86,7 +91,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       amount: subtotal,
       coupon_id: me.plan ? hiba_discount_name : coupon?.code,
       discount: me.plan ? hiba_discount_amount : discount ?? 0,
-      paid_total: me.plan ? hiba_discounted_total : total,
+      paid_total: total_with_wallet,
       sales_tax: verified_response?.total_tax,
       delivery_fee: verified_response?.shipping_charge,
       total: me.plan ? hiba_discounted_total : total,
@@ -94,6 +99,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       customer_contact,
       payment_gateway,
       use_wallet_points,
+      wallet_points_to_use: use_wallet_points ? total_to_pay - payableAmount : 0,
       billing_address: {
         ...(billing_address?.address && billing_address.address),
       },

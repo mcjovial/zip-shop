@@ -23,15 +23,15 @@ export default function MobileAuthorizedMenu() {
       <ul className="flex-grow">
         <li className="flex w-full items-center justify-between border-t border-dashed border-border-200 bg-gray-100 px-5 pt-3 text-sm font-semibold capitalize text-body focus:outline-none ltr:text-left rtl:text-right md:px-8">
           <span>{t('text-total-points')}</span>
-          <span>{me?.wallet?.total_points ?? 0}</span>
+          <span>{me?.wallet?.total ?? 0}</span>
         </li>
         <li className="flex w-full items-center justify-between bg-gray-100 px-5 pt-3 text-sm font-semibold capitalize text-body focus:outline-none ltr:text-left rtl:text-right md:px-8">
           <span>{t('text-points-used')}</span>
-          <span>{me?.wallet?.points_used ?? 0}</span>
+          <span>{me?.wallet?.used ?? 0}</span>
         </li>
         <li className="flex w-full items-center justify-between border-b border-dashed border-border-200 bg-gray-100 px-5 py-3 text-sm font-semibold capitalize text-body focus:outline-none ltr:text-left rtl:text-right md:px-8">
           <span>{t('text-available-points')}</span>
-          <span>{me?.wallet?.available_points ?? 0}</span>
+          <span>{me?.wallet?.available ?? 0}</span>
         </li>
 
         {siteSettings.authorizedLinksMobile.map(({ href, label }) => (

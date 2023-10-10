@@ -418,9 +418,9 @@ export interface User {
   name: string;
   email: string;
   wallet: {
-    total_points: number;
-    points_used: number;
-    available_points: number;
+    total: number;
+    used: number;
+    available: number;
   };
   profile: {
     id?: string;

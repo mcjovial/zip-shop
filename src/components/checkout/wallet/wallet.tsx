@@ -25,10 +25,13 @@ const Wallet = ({ totalPrice, walletAmount, walletCurrency }: Props) => {
   const { price: payableAmount } = usePrice({
     amount: calculatePayableAmount,
   });
+
+  // console.log('<<<', calculatePayableAmount);
+  
   useEffect(() => {
     if (use_wallet) {
       const calculatedCurrentWalletCurrencyAfterPayment =
-        walletCurrency - totalPrice;
+        walletAmount - totalPrice;
       if (isNegative(calculatedCurrentWalletCurrencyAfterPayment)) {
         setCalculateCurrentWalletCurrency(0);
         setCalculatePayableAmount(
@@ -71,7 +74,7 @@ const Wallet = ({ totalPrice, walletAmount, walletCurrency }: Props) => {
         className="mt-3"
         onChange={setUseWallet}
         checked={use_wallet}
-        disabled={!walletAmount}
+        disabled={walletAmount==0}
       />
 
       {use_wallet && (

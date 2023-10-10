@@ -34,7 +34,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
   const [discount] = useAtom(discountAtom);
   const [payableAmount] = useAtom(payableAmountAtom);
   const [use_wallet] = useAtom(walletAtom);
-  // console.log('verified-response', verifiedResponse);
+
   const available_items = items?.filter(
     (item) => !verifiedResponse?.unavailable_products?.includes(item.id)
   );
@@ -48,9 +48,10 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
       amount: base_amount * Number(me.plan.physicalDiscount) / 100 ?? 0,
     }
   );
+  const discounted_total = base_amount - (base_amount * Number(me.plan.physicalDiscount) / 100);
   const { price: hiba_discounted_total } = usePrice(
     verifiedResponse && {
-      amount: base_amount - (base_amount * Number(me.plan.physicalDiscount) / 100) ?? 0,
+      amount: discounted_total ?? 0,
     }
   );
 
@@ -155,7 +156,7 @@ const VerifiedItemList: React.FC<Props> = ({ className }) => {
       </div>
       {verifiedResponse && (
         <Wallet
-          totalPrice={totalPrice}
+          totalPrice={me.plan ? discounted_total : totalPrice}
           walletAmount={verifiedResponse.wallet_amount}
           walletCurrency={verifiedResponse.wallet_currency}
         />

@@ -258,13 +258,11 @@ export function useCreateOrder() {
 
   const { mutate: createOrder, isLoading } = useMutation(client.orders.create, {
     onSuccess: (data) => {      
-      console.log(data)
       if (data.authorization_url) {
         router.push(data.authorization_url);
+      } else {
+        router.push(Routes.orders);
       }
-      // if (data?.tracking_number) {
-      //   router.push(Routes.order(data?.tracking_number));
-      // }
     },
     onError: (error) => {
       const {
